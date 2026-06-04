@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocolo HPK</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#111113;color:#fff;font-family:Arial,sans-serif;min-height:100vh;padding:0 0 40px}
+
+/* ── HEADER ── */
+.header{padding:20px 20px 16px;border-bottom:1px solid #2a2a2c}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start}
+.header-label{font-size:11px;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.header-title{font-size:24px;font-weight:700;color:#fff}
+.badge{background:#1D9E75;color:#fff;font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px}
+.header-sub{font-size:12px;color:#8e8e93;margin-top:2px}
+
+/* ── MÉTRICAS ── */
+.metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:16px 20px}
+.metric{background:#1c1c1e;border-radius:12px;padding:14px 12px;text-align:center}
+.metric-label{font-size:11px;color:#8e8e93;margin-bottom:6px}
+.metric-value{font-size:28px;font-weight:700;color:#fff;line-height:1}
+.metric-sub{font-size:11px;color:#8e8e93;margin-top:4px}
+.metric-sub.up{color:#1D9E75}
+.metric-sub.down{color:#D85A30}
+
+/* ── CARDS ── */
+.card{background:#1c1c1e;border-radius:16px;margin:0 16px 14px;padding:18px 16px}
+.card-title{font-size:14px;font-weight:600;color:#fff;margin-bottom:16px}
+
+/* ── SLIDERS ── */
+.slider-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.slider-row:last-of-type{margin-bottom:0}
+.slider-label{font-size:13px;color:#8e8e93;width:76px;flex-shrink:0}
+.slider-row input[type=range]{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:#3a3a3c;outline:none}
+.slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#4A8FE7;cursor:pointer;box-shadow:0 0 0 3px rgba(74,143,231,.25)}
+.slider-val{font-size:14px;font-weight:600;color:#fff;width:18px;text-align:right}
+
+/* ── TOGGLE ROW ── */
+.toggle-section{margin-top:16px;padding-top:16px;border-top:1px solid #2a2a2c}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.toggle-row:last-child{margin-bottom:0}
+.toggle-info{display:flex;align-items:center;gap:10px}
+.toggle-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.toggle-name{font-size:13px;font-weight:500;color:#fff}
+.toggle-sub{font-size:11px;color:#8e8e93}
+.toggle{position:relative;width:44px;height:26px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:#3a3a3c;border-radius:13px;cursor:pointer;transition:.25s}
+.toggle-slider:before{content:"";position:absolute;height:20px;width:20px;left:3px;bottom:3px;background:#8e8e93;border-radius:50%;transition:.25s}
+input:checked + .toggle-slider{background:#1D9E75}
+input:checked + .toggle-slider:before{transform:translateX(18px);background:#fff}
+
+/* ── AYUNO INPUT ── */
+.ayuno-row{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.ayuno-label{font-size:13px;color:#8e8e93;flex:1}
+.ayuno-input{width:72px;background:#2c2c2e;border:1px solid #3a3a3c;border-radius:8px;padding:8px 10px;color:#fff;font-size:14px;font-weight:600;text-align:center;outline:none}
+.ayuno-input:focus{border-color:#4A8FE7}
+
+/* ── BOTÓN GUARDAR ── */
+.btn-guardar{width:100%;padding:14px;background:#2c2c2e;border:1px solid #3a3a3c;border-radius:12px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;margin-top:16px}
+.btn-guardar:hover{background:#3a3a3c}
+.btn-guardar.saved{background:#1D9E75;border-color:#1D9E75}
+.btn-guardar:disabled{opacity:.5;cursor:not-allowed}
+
+/* ── EJES ── */
+.eje-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.eje-row:last-child{margin-bottom:0}
+.eje-letter{font-size:14px;font-weight:700;width:16px;flex-shrink:0}
+.eje-info{flex:1}
+.eje-header{display:flex;justify-content:space-between;margin-bottom:5px}
+.eje-name{font-size:12px;color:#8e8e93}
+.eje-pct{font-size:12px;font-weight:600}
+.eje-track{height:6px;background:#2c2c2e;border-radius:3px;overflow:hidden}
+.eje-fill{height:100%;border-radius:3px;transition:width .5s ease}
+
+/* ── PROTOCOLO HOY ── */
+.proto-item{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #2a2a2c}
+.proto-item:last-child{border-bottom:none}
+.proto-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.proto-name{font-size:13px;font-weight:600;color:#fff;margin-bottom:3px}
+.proto-why{font-size:11px;color:#8e8e93;line-height:1.5}
+
+/* ── MINI CHART ── */
+.chart-wrap{overflow:hidden}
+.chart-bars{display:flex;align-items:flex-end;gap:3px;height:48px;margin-top:8px}
+.chart-bar{flex:1;border-radius:2px 2px 0 0;min-height:3px;transition:height .4s ease}
+.chart-dates{display:flex;gap:3px;margin-top:4px}
+.chart-date{flex:1;font-size:8px;color:#8e8e93;text-align:center;overflow:hidden}
+
+/* ── ESTADO YA REGISTRADO ── */
+.ya-registrado{background:#1a2e1a;border:1px solid #1D9E75;border-radius:12px;padding:16px;margin:0 16px 14px;text-align:center}
+.ya-registrado p{color:#6EEFC4;font-size:13px;font-weight:500}
+.ya-registrado span{color:#8e8e93;font-size:11px}
+
+/* ── LOADING ── */
+.loading{text-align:center;padding:60px 20px;color:#8e8e93;font-size:14px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1D9E75;color:#fff;padding:12px 24px;border-radius:24px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:99}
+.toast.show{opacity:1}
+.toast.err{background:#D85A30}
+</style>
+</head>
+<body>
+
+<div id="app"><div class="loading">Cargando Protocolo HPK…</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const C_H = "#D85A30";
+const C_P = "#7F77DD";
+const C_K = "#1D9E75";
+
+let estado = {};
+
+// ── INIT ─────────────────────────────────────────────────
+window.addEventListener("load", () => {
+  google.script.run
+    .withSuccessHandler(init)
+    .withFailureHandler(err => showToast("Error al cargar", true))
+    .getEstado();
+});
+
+function init(data) {
+  estado = data;
+  render();
+}
+
+// ── RENDER COMPLETO ───────────────────────────────────────
+function render() {
+  const app = document.getElementById("app");
+  const { dia, semana, durFase, fase, racha, ultimoScore, tendencia,
+          yaRegistroHoy, historial } = estado;
+
+  const semFase = Math.ceil((dia || 1) / 7);
+  const durSem  = Math.ceil(durFase / 7);
+  const scoreDisplay = ultimoScore !== null ? ultimoScore : "—";
+  const tendDisplay  = tendencia !== null
+    ? (tendencia > 0 ? "+" : "") + tendencia
+    : "—";
+  const tendClass = tendencia > 0 ? "up" : tendencia < 0 ? "down" : "";
+
+  // Ejes del último registro
+  const ult = historial && historial.length ? historial[historial.length - 1] : null;
+  const ejH = ult ? Math.round(ult.eje_h * 10) : 0;
+  const ejP = ult ? Math.round(ult.eje_p * 10) : 0;
+  const ejK = ult ? Math.round(ult.eje_k * 10) : 0;
+
+  app.innerHTML = `
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <div class="header-label">Protocolo HPK</div>
+        <div class="header-title">Día ${dia || 1} — ${fase || "Activación"}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="badge">${fase || "Activación"}</div>
+        <div class="header-sub" style="margin-top:6px">Semana ${semFase} de ${durSem}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-label">HPK Score</div>
+      <div class="metric-value" id="score-live">${scoreDisplay}</div>
+      <div class="metric-sub">hoy</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Racha</div>
+      <div class="metric-value">${racha}d</div>
+      <div class="metric-sub">consecutivos</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Tendencia</div>
+      <div class="metric-value">${tendDisplay}</div>
+      <div class="metric-sub ${tendClass}">vs semana ant.</div>
+    </div>
+  </div>
+
+  ${yaRegistroHoy ? `
+  <div class="ya-registrado">
+    <p>✓ Registro de hoy guardado</p>
+    <span>El registro es inmutable. Volvé mañana.</span>
+  </div>` : `
+  <div class="card">
+    <div class="card-title">Registrar estado ahora</div>
+
+    <div class="slider-row">
+      <span class="slider-label">Energía</span>
+      <input type="range" min="1" max="10" value="7" step="1" id="sl-energia" oninput="liveUpdate()">
+      <span class="slider-val" id="v-energia">7</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">Foco</span>
+      <input type="range" min="1" max="10" value="7" step="1" id="sl-foco" oninput="liveUpdate()">
+      <span class="slider-val" id="v-foco">7</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">Humor</span>
+      <input type="range" min="1" max="10" value="7" step="1" id="sl-humor" oninput="liveUpdate()">
+      <span class="slider-val" id="v-humor">7</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">Sueño (h)</span>
+      <input type="range" min="3" max="10" value="7" step="1" id="sl-sueno" oninput="liveUpdate()">
+      <span class="slider-val" id="v-sueno">7</span>
+    </div>
+
+    <div class="toggle-section">
+      <div class="ayuno-row">
+        <span class="ayuno-label" style="display:flex;align-items:center;gap:6px">
+          <span style="width:8px;height:8px;border-radius:50%;background:${C_H};display:inline-block"></span>
+          Horas de ayuno
+        </span>
+        <input type="number" class="ayuno-input" id="inp-ayuno" min="0" max="24" value="16">
+      </div>
+      <div class="ayuno-row">
+        <span class="ayuno-label" style="display:flex;align-items:center;gap:6px">
+          <span style="width:8px;height:8px;border-radius:50%;background:${C_P};display:inline-block"></span>
+          Lectura (min)
+        </span>
+        <input type="number" class="ayuno-input" id="inp-lectura" min="0" max="120" value="20">
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-dot" style="background:${C_K}"></div>
+          <div>
+            <div class="toggle-name">Entrené hoy</div>
+            <div class="toggle-sub">HIIT / combate / fuerza</div>
+          </div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="tog-entreno" onchange="liveUpdate()"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-dot" style="background:${C_H}"></div>
+          <div>
+            <div class="toggle-name">Ducha fría</div>
+            <div class="toggle-sub">Mínimo 2 minutos</div>
+          </div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="tog-frio" onchange="liveUpdate()"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-dot" style="background:${C_P}"></div>
+          <div>
+            <div class="toggle-name">Cierre nocturno</div>
+            <div class="toggle-sub">Oscuridad antes de las 22h</div>
+          </div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="tog-cierre" onchange="liveUpdate()"><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+
+    <button class="btn-guardar" id="btn-guardar" onclick="guardar()">Guardar registro</button>
+  </div>`}
+
+  <div class="card">
+    <div class="card-title">Estado de ejes</div>
+    <div class="eje-row">
+      <span class="eje-letter" style="color:${C_H}">H</span>
+      <div class="eje-info">
+        <div class="eje-header">
+          <span class="eje-name">Hormonal</span>
+          <span class="eje-pct" style="color:${C_H}" id="pct-h">${ejH}%</span>
+        </div>
+        <div class="eje-track"><div class="eje-fill" id="bar-h" style="width:${ejH}%;background:${C_H}"></div></div>
+      </div>
+    </div>
+    <div class="eje-row">
+      <span class="eje-letter" style="color:${C_P}">P</span>
+      <div class="eje-info">
+        <div class="eje-header">
+          <span class="eje-name">Psico-cognitivo</span>
+          <span class="eje-pct" style="color:${C_P}" id="pct-p">${ejP}%</span>
+        </div>
+        <div class="eje-track"><div class="eje-fill" id="bar-p" style="width:${ejP}%;background:${C_P}"></div></div>
+      </div>
+    </div>
+    <div class="eje-row">
+      <span class="eje-letter" style="color:${C_K}">K</span>
+      <div class="eje-info">
+        <div class="eje-header">
+          <span class="eje-name">Kinético</span>
+          <span class="eje-pct" style="color:${C_K}" id="pct-k">${ejK}%</span>
+        </div>
+        <div class="eje-track"><div class="eje-fill" id="bar-k" style="width:${ejK}%;background:${C_K}"></div></div>
+      </div>
+    </div>
+    ${renderChart(historial)}
+  </div>
+
+  <div class="card">
+    <div class="card-title">Tu protocolo hoy</div>
+    ${renderProtocolo()}
+  </div>`;
+
+  liveUpdate();
+}
+
+// ── LIVE UPDATE (sliders → ejes en tiempo real) ───────────
+function liveUpdate() {
+  const e = val("sl-energia"), f = val("sl-foco"),
+        h = val("sl-humor"),   s = val("sl-sueno");
+  const ay = numVal("inp-ayuno"), lec = numVal("inp-lectura");
+  const en = chk("tog-entreno"), fr = chk("tog-frio"), ci = chk("tog-cierre");
+
+  setText("v-energia", e); setText("v-foco", f);
+  setText("v-humor", h);   setText("v-sueno", s);
+
+  const ejH = Math.min(100, Math.round((e*0.35 + h*0.30 + Math.min(s,10)*0.20 + Math.min(ay/2,10)*0.15) * 10));
+  const ejP = Math.min(100, Math.round((f*0.50 + Math.min(lec/6,10)*0.30 + h*0.20) * 10));
+  const ejK = Math.round((en?10:0)*0.40*10 + (fr?10:0)*0.30*10 + (ci?10:0)*0.30*10);
+  const score = ((ejH/10 + ejP/10 + ejK/10) / 3).toFixed(1);
+
+  setBar("bar-h","pct-h", ejH);
+  setBar("bar-p","pct-p", ejP);
+  setBar("bar-k","pct-k", ejK);
+  setText("score-live", score);
+}
+
+// ── GUARDAR ───────────────────────────────────────────────
+function guardar() {
+  const btn = document.getElementById("btn-guardar");
+  if (!btn) return;
+  btn.disabled = true;
+  btn.textContent = "Guardando…";
+
+  const data = {
+    energia:  val("sl-energia"),
+    humor:    val("sl-humor"),
+    sueno:    val("sl-sueno"),
+    foco:     val("sl-foco"),
+    ayuno:    numVal("inp-ayuno"),
+    lectura:  numVal("inp-lectura"),
+    entreno:  chk("tog-entreno"),
+    frio:     chk("tog-frio"),
+    cierre:   chk("tog-cierre")
+  };
+
+  google.script.run
+    .withSuccessHandler(res => {
+      if (res.ok) {
+        btn.textContent = "✓ Guardado";
+        btn.classList.add("saved");
+        showToast("Registro guardado. Huella permanente.");
+        setTimeout(() => {
+          google.script.run.withSuccessHandler(init).getEstado();
+        }, 1200);
+      } else {
+        btn.disabled = false;
+        btn.textContent = "Guardar registro";
+        showToast(res.msg, true);
+      }
+    })
+    .withFailureHandler(e => {
+      btn.disabled = false;
+      btn.textContent = "Guardar registro";
+      showToast("Error al guardar", true);
+    })
+    .guardarRegistro(data);
+}
+
+// ── PROTOCOLO HOY ─────────────────────────────────────────
+function renderProtocolo() {
+  const items = [
+    { color: C_H, name: "Ayuno activo hasta las 12h",    why: "GLP-1 + dopamina matutina — no romper antes" },
+    { color: C_K, name: "HIIT 25 min — rounds de 40/20", why: "Activa GLP-1 endógeno + noradrenalina. Sin excusas." },
+    { color: C_P, name: "Lectura de input cognitivo — 20 min", why: "Post-entreno: BDNF elevado, aprendizaje acelerado" },
+    { color: C_H, name: "Ducha fría 2 min al terminar",  why: "Noradrenalina + dopamina sostenida 2-3 horas" },
+    { color: C_P, name: "Registrá tu estado antes de las 23:59", why: "El registro es inmutable — deja huella real en el sistema" },
+    { color: C_K, name: "Cierre: oscuridad a las 22h",   why: "Melatonina + GH nocturna — reparación completa" },
+  ];
+  return items.map(i => `
+    <div class="proto-item">
+      <div class="proto-dot" style="background:${i.color}"></div>
+      <div>
+        <div class="proto-name">${i.name}</div>
+        <div class="proto-why">${i.why}</div>
+      </div>
+    </div>`).join("");
+}
+
+// ── MINI CHART ────────────────────────────────────────────
+function renderChart(historial) {
+  if (!historial || historial.length < 2) return "";
+  const max = Math.max(...historial.map(h => h.score || 0), 1);
+  const bars = historial.map(h => {
+    const pct = Math.round(((h.score || 0) / 10) * 100);
+    const color = h.score >= 7 ? C_K : h.score >= 5 ? "#F5A623" : C_H;
+    return `<div class="chart-bar" style="height:${pct}%;background:${color};opacity:.7"></div>`;
+  }).join("");
+  const dates = historial.map(h => {
+    const d = new Date(h.fecha + "T00:00:00");
+    return `<div class="chart-date">${d.getDate()}/${d.getMonth()+1}</div>`;
+  }).join("");
+  return `
+    <div class="chart-wrap" style="margin-top:16px;padding-top:14px;border-top:1px solid #2a2a2c">
+      <div style="font-size:11px;color:#8e8e93;margin-bottom:6px">Últimos ${historial.length} días</div>
+      <div class="chart-bars">${bars}</div>
+      <div class="chart-dates">${dates}</div>
+    </div>`;
+}
+
+// ── HELPERS ───────────────────────────────────────────────
+function val(id) { const el = document.getElementById(id); return el ? Number(el.value) : 0; }
+function numVal(id) { const el = document.getElementById(id); return el ? Number(el.value) || 0 : 0; }
+function chk(id) { const el = document.getElementById(id); return el ? el.checked : false; }
+function setText(id, v) { const el = document.getElementById(id); if(el) el.textContent = v; }
+function setBar(barId, pctId, pct) {
+  const b = document.getElementById(barId), p = document.getElementById(pctId);
+  if(b) b.style.width = Math.min(pct, 100) + "%";
+  if(p) p.textContent = Math.min(pct, 100) + "%";
+}
+function showToast(msg, err) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (err ? " err" : "");
+  setTimeout(() => t.className = "toast", 3000);
+}
+</script>
+</body>
+</html>
