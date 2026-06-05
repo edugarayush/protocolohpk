@@ -8,23 +8,103 @@
 <style>
 :root{--h:#D85A30;--p:#7F77DD;--k:#1D9E75;--bg:#0A0A0B;--bg2:#131315;--bg3:#1A1A1C;--border:rgba(255,255,255,0.07);--text:#F0EFE8;--muted:#5A5A62;--score:#F5A623}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden}
-#loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity 0.5s ease}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;min-height:100vh}
+
+/* ── LOADING ── */
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;transition:opacity 0.5s ease}
 #loading.hide{opacity:0;pointer-events:none}
 .ld-logo{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.28em;color:var(--muted);text-transform:uppercase;margin-bottom:28px}
 .ld-bar-wrap{width:100px;height:1px;background:var(--border);overflow:hidden}
 .ld-bar{height:100%;background:var(--score);animation:lb 1.4s ease forwards}
 @keyframes lb{from{width:0}to{width:100%}}
-#app{max-width:430px;margin:0 auto;min-height:100vh;opacity:0;transform:translateY(12px);transition:opacity 0.4s ease,transform 0.4s ease}
-#app.visible{opacity:1;transform:translateY(0)}
-.hdr{padding:28px 20px 20px;border-bottom:1px solid var(--border);position:relative;background:var(--bg)}
-.hdr-ey{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px}
-.hdr-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;line-height:1.1}
+
+/* ── VISTAS ── */
+#landing{display:block}
+#appview{display:none;max-width:430px;margin:0 auto;padding-bottom:40px}
+#appview.active{display:block}
+
+/* ── LANDING NAV ── */
+.l-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);background:rgba(10,10,11,0.85);backdrop-filter:blur(16px)}
+.l-nav-logo{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase}
+.l-nav-logo b{color:var(--score)}
+.l-nav-btn{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text);padding:9px 18px;border:1px solid var(--border);border-radius:2px;cursor:pointer;background:none;transition:.2s}
+.l-nav-btn:hover{border-color:var(--score);color:var(--score)}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 24px 80px;position:relative}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:72px 72px;pointer-events:none;z-index:0}
+.hero-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.24em;color:var(--muted);text-transform:uppercase;margin-bottom:28px;opacity:0;animation:fadeUp 0.7s ease 0.2s forwards}
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(52px,12vw,96px);font-weight:800;line-height:0.92;letter-spacing:-0.03em;margin-bottom:32px;opacity:0;animation:fadeUp 0.7s ease 0.35s forwards}
+.hero-title .l1{display:block;color:var(--text)}
+.hero-title .l2{display:block;color:transparent;-webkit-text-stroke:1px rgba(240,239,232,0.2)}
+.hero-title .l3{display:block;color:var(--score)}
+.hero-sub{max-width:400px;font-size:14px;line-height:1.8;color:var(--muted);margin-bottom:48px;opacity:0;animation:fadeUp 0.7s ease 0.5s forwards}
+.hero-sub b{color:var(--text);font-weight:400}
+.hero-btn{display:inline-block;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--bg);background:var(--score);padding:16px 36px;border-radius:2px;cursor:pointer;border:none;transition:.2s;opacity:0;animation:fadeUp 0.7s ease 0.65s forwards}
+.hero-btn:hover{background:var(--text);transform:translateY(-2px)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── EJES SECTION ── */
+.section{padding:64px 24px;border-top:1px solid var(--border);position:relative;z-index:1}
+.sec-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;color:var(--muted);text-transform:uppercase;margin-bottom:40px;display:flex;align-items:center;gap:14px}
+.sec-tag::after{content:'';flex:1;height:1px;background:var(--border)}
+.ejes-grid{display:flex;flex-direction:column;gap:1px;background:var(--border)}
+.eje-card{background:var(--bg);padding:32px 24px;position:relative;overflow:hidden}
+.eje-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:2px}
+.eje-card.h::before{background:var(--h)}
+.eje-card.p::before{background:var(--p)}
+.eje-card.k::before{background:var(--k)}
+.eje-big{font-family:'Syne',sans-serif;font-size:56px;font-weight:800;line-height:1;margin-bottom:12px;opacity:0.1}
+.eje-card.h .eje-big{color:var(--h)}
+.eje-card.p .eje-big{color:var(--p)}
+.eje-card.k .eje-big{color:var(--k)}
+.eje-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px}
+.eje-desc{font-size:12px;line-height:1.7;color:var(--muted);margin-bottom:16px}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.1em;padding:3px 8px;border-radius:2px;text-transform:uppercase}
+.eje-card.h .tag{background:rgba(216,90,48,0.1);color:var(--h)}
+.eje-card.p .tag{background:rgba(127,119,221,0.1);color:var(--p)}
+.eje-card.k .tag{background:rgba(29,158,117,0.1);color:var(--k)}
+
+/* ── COMO FUNCIONA ── */
+.features{display:flex;flex-direction:column;gap:0}
+.feat{display:flex;gap:18px;padding:18px 0;border-bottom:1px solid var(--border)}
+.feat:last-child{border-bottom:none}
+.feat-num{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);flex-shrink:0;padding-top:2px}
+.feat-title{font-size:12px;font-weight:500;margin-bottom:4px}
+.feat-desc{font-size:11px;color:var(--muted);line-height:1.6}
+
+/* ── FASES ── */
+.fases{display:flex;flex-direction:column;gap:1px;background:var(--border)}
+.fase{background:var(--bg);padding:24px}
+.fase-num{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+.fase-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:6px}
+.fase-sem{font-family:'DM Mono',monospace;font-size:8px;color:var(--score);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px}
+.fase-desc{font-size:11px;line-height:1.7;color:var(--muted)}
+
+/* ── CTA FINAL LANDING ── */
+.cta-section{padding:80px 24px;border-top:1px solid var(--border);text-align:center;position:relative;z-index:1}
+.cta-title{font-family:'Syne',sans-serif;font-size:clamp(36px,9vw,64px);font-weight:800;line-height:0.95;letter-spacing:-0.03em;margin-bottom:24px}
+.cta-title b{color:var(--score)}
+.cta-sub{font-size:13px;color:var(--muted);margin-bottom:40px;line-height:1.7}
+.cta-note{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-top:18px;letter-spacing:0.1em;text-transform:uppercase}
+
+/* ── FOOTER ── */
+.l-footer{padding:24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.l-footer-logo{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase}
+.l-footer-logo b{color:var(--score)}
+.l-footer-txt{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:0.08em}
+
+/* ── APP VIEW ── */
+.hdr{padding:28px 20px 20px;border-bottom:1px solid var(--border);background:var(--bg);position:relative}
+.hdr-back{position:absolute;top:28px;left:20px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.1em;cursor:pointer;text-transform:uppercase;background:none;border:none;padding:0}
+.hdr-back:hover{color:var(--text)}
+.hdr-ey{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;text-align:center}
+.hdr-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;line-height:1.1;text-align:center}
 .hdr-title b{color:var(--score)}
-.hdr-right{position:absolute;top:28px;right:20px;text-align:right}
+.hdr-right{text-align:center;margin-top:8px}
 .badge{display:inline-block;font-family:'DM Mono',monospace;font-size:8px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:rgba(29,158,117,0.12);color:var(--k);border:1px solid rgba(29,158,117,0.25)}
-.hdr-sem{font-size:10px;color:var(--muted);margin-top:5px;font-family:'DM Mono',monospace}
+.hdr-sem{font-size:10px;color:var(--muted);margin-top:4px;font-family:'DM Mono',monospace}
 .mts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
 .mt{background:var(--bg);padding:18px 14px;text-align:center}
 .mt-lbl{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:7px}
@@ -81,142 +161,229 @@ input:checked+.swt:before{transform:translateX(17px);background:var(--k)}
 .ce{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px}
 .cb{display:flex;align-items:flex-end;gap:3px;height:48px}
 .cbar{flex:1;border-radius:2px 2px 0 0;min-height:2px}
-.cd{display:flex;gap:3px;margin-top:4px}
+.cd2{display:flex;gap:3px;margin-top:4px}
 .cdt{flex:1;font-family:'DM Mono',monospace;font-size:7px;color:var(--muted);text-align:center}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:11px 22px;border-radius:22px;font-family:'DM Mono',monospace;font-size:11px;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;z-index:99;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.ok{border-color:rgba(29,158,117,0.35);color:var(--k)}
 .toast.err{border-color:rgba(216,90,48,0.35);color:var(--h)}
-.err-box{padding:40px 20px;text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;line-height:1.8}
-.retry-btn{margin-top:16px;background:none;border:1px solid var(--border);color:var(--muted);padding:8px 18px;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em}
 </style>
 </head>
 <body>
+
 <div id="loading">
   <div class="ld-logo">Protocolo HPK</div>
   <div class="ld-bar-wrap"><div class="ld-bar"></div></div>
 </div>
-<div id="app"><div id="root"></div></div>
+
+<!-- ══════════════ LANDING ══════════════ -->
+<div id="landing">
+  <nav class="l-nav">
+    <div class="l-nav-logo">Protocolo <b>HPK</b></div>
+    <button class="l-nav-btn" onclick="goApp()">Ingresar →</button>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-tag">Sistema de automonitoreo hormonal para hombres</div>
+    <h1 class="hero-title">
+      <span class="l1">Protocolo</span>
+      <span class="l2">HPK</span>
+      <span class="l3">Prime.</span>
+    </h1>
+    <p class="hero-sub">No es disciplina. Es <b>biología</b>. Registrás 9 variables diarias vinculadas a tu química interna. El sistema construye un historial inmutable de tu estado hormonal, psico-cognitivo y kinético.</p>
+    <button class="hero-btn" onclick="goApp()">Empezar el protocolo</button>
+  </section>
+
+  <section class="section">
+    <div class="sec-tag">Los tres ejes</div>
+    <div class="ejes-grid">
+      <div class="eje-card h">
+        <div class="eje-big">H</div>
+        <div class="eje-name">Hormonal</div>
+        <div class="eje-desc">El motor bioquímico. Mide energía, humor, sueño y ayuno para estimar tu perfil hormonal diario por proxy conductual.</div>
+        <div class="tags"><span class="tag">GLP-1</span><span class="tag">Dopamina</span><span class="tag">GH</span><span class="tag">Testosterona</span><span class="tag">Insulina</span></div>
+      </div>
+      <div class="eje-card p">
+        <div class="eje-big">P</div>
+        <div class="eje-name">Psico-cognitivo</div>
+        <div class="eje-desc">La arquitectura mental. Foco, lectura y cierre nocturno como proxies de neuroplasticidad y estabilidad emocional.</div>
+        <div class="tags"><span class="tag">BDNF</span><span class="tag">Serotonina</span><span class="tag">Cortisol</span><span class="tag">Oxitocina</span></div>
+      </div>
+      <div class="eje-card k">
+        <div class="eje-big">K</div>
+        <div class="eje-name">Kinético</div>
+        <div class="eje-desc">El estímulo físico. Entrenamiento, exposición al frío y rutina de cierre como activadores del sistema hormonal.</div>
+        <div class="tags"><span class="tag">Noradrenalina</span><span class="tag">Melatonina</span><span class="tag">IGF-1</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sec-tag">Cómo funciona</div>
+    <div class="features">
+      <div class="feat"><span class="feat-num">01</span><div><div class="feat-title">Registrás en 2 minutos</div><div class="feat-desc">9 variables simples cada día. El sistema calcula tu HPK Score automáticamente.</div></div></div>
+      <div class="feat"><span class="feat-num">02</span><div><div class="feat-title">Registro inmutable</div><div class="feat-desc">Una vez guardado, no se edita. Cada día deja una huella permanente e inalienable.</div></div></div>
+      <div class="feat"><span class="feat-num">03</span><div><div class="feat-title">Tu bigdata interno</div><div class="feat-desc">Con el tiempo, el historial revela patrones que ningún análisis externo puede darte.</div></div></div>
+      <div class="feat"><span class="feat-num">04</span><div><div class="feat-title">Protocolo del día</div><div class="feat-desc">Cada acceso te muestra las acciones hormonales concretas para ese día.</div></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sec-tag">Fases del protocolo</div>
+    <div class="fases">
+      <div class="fase"><div class="fase-num">Fase 01</div><div class="fase-title">Activación</div><div class="fase-sem">Semanas 1 — 4</div><div class="fase-desc">Instalar los hábitos mínimos y registrar sin cambiar nada. El cuerpo es el experimento.</div></div>
+      <div class="fase"><div class="fase-num">Fase 02</div><div class="fase-title">Calibración</div><div class="fase-sem">Semanas 5 — 8</div><div class="fase-desc">Leer los datos propios. Ajustar el protocolo según la evidencia personal acumulada.</div></div>
+      <div class="fase"><div class="fase-num">Fase 03</div><div class="fase-title">Identidad</div><div class="fase-sem">Semanas 9 — 12</div><div class="fase-desc">El sistema sos vos. Los hábitos son automáticos. El HPK Score refleja quién sos.</div></div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2 class="cta-title">Llega a tu<br><b>prime.</b></h2>
+    <p class="cta-sub">El historial arranca desde el primer registro. No hay razón para esperar.</p>
+    <button class="hero-btn" onclick="goApp()">Abrir Protocolo HPK</button>
+    <div class="cta-note">Disponible en cualquier dispositivo</div>
+  </section>
+
+  <footer class="l-footer">
+    <div class="l-footer-logo">Protocolo <b>HPK</b></div>
+    <div class="l-footer-txt">Hormonal · Psico-cognitivo · Kinético</div>
+  </footer>
+</div>
+
+<!-- ══════════════ APP ══════════════ -->
+<div id="appview">
+  <div class="hdr">
+    <button class="hdr-back" onclick="goLanding()">← Volver</button>
+    <div class="hdr-ey">Protocolo HPK</div>
+    <div class="hdr-title">Dia <b id="hdr-dia">1</b> — <span id="hdr-fase">Activacion</span></div>
+    <div class="hdr-right">
+      <div class="badge" id="hdr-badge">Activacion</div>
+      <div class="hdr-sem" id="hdr-sem">Sem 1 / 4</div>
+    </div>
+  </div>
+  <div class="mts">
+    <div class="mt"><div class="mt-lbl">Score</div><div class="mt-val sc" id="sc">--</div><div class="mt-sub">hoy</div></div>
+    <div class="mt"><div class="mt-lbl">Racha</div><div class="mt-val" id="racha">0<span style="font-size:13px;color:var(--muted)">d</span></div><div class="mt-sub">dias</div></div>
+    <div class="mt"><div class="mt-lbl">Tendencia</div><div class="mt-val" id="tend">--</div><div class="mt-sub" id="tend-sub">vs ayer</div></div>
+  </div>
+  <div id="app-body"></div>
+</div>
+
 <div class="toast" id="toast"></div>
+
 <script>
 var API="https://script.google.com/macros/s/AKfycbwzc6lW6PA4cuIJNgWy4Bnlip10UtabrOcQbCdOOh6Knf4UI64XMkS5P9DutjszzYXY/exec";
 var CH="#D85A30",CP="#7F77DD",CK="#1D9E75",CS="#F5A623";
 var estado={};
+var appLoaded=false;
+
+setTimeout(function(){
+  document.getElementById("loading").classList.add("hide");
+},1400);
+
+function goApp(){
+  document.getElementById("landing").style.display="none";
+  document.getElementById("appview").classList.add("active");
+  window.scrollTo(0,0);
+  if(!appLoaded){ loadApp(); appLoaded=true; }
+}
+
+function goLanding(){
+  document.getElementById("appview").classList.remove("active");
+  document.getElementById("landing").style.display="block";
+  window.scrollTo(0,0);
+}
 
 async function callAPI(action,body){
   if(action==="getEstado"){
     var r=await fetch(API+"?action=getEstado&t="+Date.now());
     return r.json();
   }
-  var r=await fetch(API,{method:"POST",body:JSON.stringify({action:action,...body})});
+  var r=await fetch(API,{method:"POST",body:JSON.stringify({action:action,...(body||{})})});
   return r.json();
 }
 
-async function init(){
+async function loadApp(){
+  document.getElementById("app-body").innerHTML='<div style="padding:40px 20px;text-align:center;color:var(--muted);font-family:DM Mono,monospace;font-size:11px">Cargando...</div>';
   try{
     estado=await callAPI("getEstado");
-    render();
-    setTimeout(function(){
-      document.getElementById("loading").classList.add("hide");
-      document.getElementById("app").classList.add("visible");
-    },1200);
+    renderApp();
   }catch(e){
-    document.getElementById("root").innerHTML='<div class="err-box">Error al conectar con el servidor.<br><button class="retry-btn" onclick="init()">Reintentar</button></div>';
-    document.getElementById("loading").classList.add("hide");
-    document.getElementById("app").classList.add("visible");
+    document.getElementById("app-body").innerHTML='<div style="padding:40px 20px;text-align:center;color:var(--muted);font-family:DM Mono,monospace;font-size:11px">Error al conectar.<br><br><button onclick="loadApp()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:8px 16px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:10px">Reintentar</button></div>';
   }
 }
 
-function render(){
+function renderApp(){
   var dia=estado.dia||1,fase=estado.fase||"Activacion",durFase=estado.durFase||28;
   var racha=estado.racha||0,us=estado.ultimoScore,tend=estado.tendencia;
   var yaReg=estado.yaRegistroHoy||false,hist=estado.historial||[];
-  var ds=(us!==null&&us!==undefined)?us:"--";
+
+  document.getElementById("hdr-dia").textContent=dia;
+  document.getElementById("hdr-fase").textContent=fase;
+  document.getElementById("hdr-badge").textContent=fase;
+  document.getElementById("hdr-sem").textContent="Sem "+Math.ceil(dia/7)+" / "+Math.ceil(durFase/7);
+  document.getElementById("sc").textContent=(us!==null&&us!==undefined)?us:"--";
+  document.getElementById("racha").innerHTML=racha+'<span style="font-size:13px;color:var(--muted)">d</span>';
   var td=(tend!==null&&tend!==undefined)?((tend>0?"+":"")+tend):"--";
-  var tc=tend>0?"up":tend<0?"dn":"";
+  document.getElementById("tend").textContent=td;
+  var ts=document.getElementById("tend-sub");
+  ts.className="mt-sub"+(tend>0?" up":tend<0?" dn":"");
+
   var ult=hist.length?hist[hist.length-1]:null;
   var ejH=ult?Math.min(Math.round(ult.eje_h*10),100):0;
   var ejP=ult?Math.min(Math.round(ult.eje_p*10),100):0;
   var ejK=ult?Math.min(Math.round(ult.eje_k*10),100):0;
 
-  document.getElementById("root").innerHTML=
-  '<div class="hdr">'+
-    '<div class="hdr-ey">Protocolo HPK</div>'+
-    '<div class="hdr-title">Dia <b>'+dia+'</b> — '+fase+'</div>'+
-    '<div class="hdr-right"><div class="badge">'+fase+'</div><div class="hdr-sem">Sem '+Math.ceil(dia/7)+' / '+Math.ceil(durFase/7)+'</div></div>'+
-  '</div>'+
-  '<div class="mts">'+
-    '<div class="mt"><div class="mt-lbl">Score</div><div class="mt-val sc" id="sc">'+ds+'</div><div class="mt-sub">hoy</div></div>'+
-    '<div class="mt"><div class="mt-lbl">Racha</div><div class="mt-val">'+racha+'<span style="font-size:13px;color:var(--muted)">d</span></div><div class="mt-sub">dias</div></div>'+
-    '<div class="mt"><div class="mt-lbl">Tendencia</div><div class="mt-val">'+td+'</div><div class="mt-sub '+tc+'">vs ayer</div></div>'+
-  '</div>'+
+  document.getElementById("app-body").innerHTML=
   (yaReg?
     '<div class="ya-card"><p>Registro de hoy guardado</p><span>Inmutable. Volve manana.</span></div>'
   :
     '<div class="card">'+
       '<div class="ct">Registrar ahora</div>'+
-      slRow("Energia","sl-e","v-e")+
-      slRow("Foco","sl-f","v-f")+
-      slRow("Humor","sl-h","v-h")+
-      slRow("Sueno h","sl-s","v-s")+
+      slR("Energia","sle","ve")+slR("Foco","slf","vf")+slR("Humor","slh","vh")+slR("Sueno h","sls","vs")+
       '<div class="tsec">'+
-        numRow(CH,"Ayuno (h)","ia",16)+
-        numRow(CP,"Lectura (min)","il",20)+
-        togRow(CK,"Entrene hoy","HIIT / combate / fuerza","ten")+
-        togRow(CH,"Ducha fria","Minimo 2 minutos","tfr")+
-        togRow(CP,"Cierre nocturno","Oscuridad antes 22h","tci")+
+        nR(CH,"Ayuno (h)","ia",16)+nR(CP,"Lectura (min)","il",20)+
+        tR(CK,"Entrene hoy","HIIT / combate / fuerza","ten")+
+        tR(CH,"Ducha fria","Minimo 2 minutos","tfr")+
+        tR(CP,"Cierre nocturno","Oscuridad antes 22h","tci")+
       '</div>'+
       '<button class="btn-save" id="bsv" onclick="guardar()">Guardar registro</button>'+
     '</div>'
   )+
   '<div class="card">'+
     '<div class="ct">Estado de ejes</div>'+
-    ejeRow(CH,"H","Hormonal","bar-h","pct-h",ejH)+
-    ejeRow(CP,"P","Psico-cognitivo","bar-p","pct-p",ejP)+
-    ejeRow(CK,"K","Kinetico","bar-k","pct-k",ejK)+
-    renderChart(hist)+
+    eR(CH,"H","Hormonal","bh","ph",ejH)+eR(CP,"P","Psico-cognitivo","bp","pp",ejP)+eR(CK,"K","Kinetico","bk","pk",ejK)+
+    rChart(hist)+
   '</div>'+
   '<div class="card">'+
     '<div class="ct">Protocolo hoy</div>'+
-    proto(CH,"Ayuno activo hasta las 12h","GLP-1 + dopamina matutina")+
-    proto(CK,"HIIT 25 min - rounds 40/20","GLP-1 endogeno + noradrenalina")+
-    proto(CP,"Lectura 20 min post-entreno","BDNF elevado - aprendizaje acelerado")+
-    proto(CH,"Ducha fria 2 min","Noradrenalina + dopamina 2-3h")+
-    proto(CP,"Registra antes de las 23:59","Registro inmutable - huella real")+
-    proto(CK,"Cierre: oscuridad a las 22h","Melatonina + GH nocturna")+
+    pr(CH,"Ayuno activo hasta las 12h","GLP-1 + dopamina matutina")+
+    pr(CK,"HIIT 25 min - rounds 40/20","GLP-1 endogeno + noradrenalina")+
+    pr(CP,"Lectura 20 min post-entreno","BDNF elevado - aprendizaje acelerado")+
+    pr(CH,"Ducha fria 2 min","Noradrenalina + dopamina 2-3h")+
+    pr(CP,"Registra antes de las 23:59","Registro inmutable - huella real")+
+    pr(CK,"Cierre: oscuridad a las 22h","Melatonina + GH nocturna")+
   '</div>';
 
   live();
 }
 
-function slRow(lbl,sid,vid){
-  return '<div class="sr"><span class="sl">'+lbl+'</span><input type="range" min="1" max="10" value="7" step="1" id="'+sid+'" oninput="live()"><span class="sv" id="'+vid+'">7</span></div>';
-}
-function numRow(c,lbl,id,val){
-  return '<div class="nr"><div class="nl"><span class="dot" style="background:'+c+'"></span>'+lbl+'</div><input type="number" class="ni" id="'+id+'" min="0" max="120" value="'+val+'"></div>';
-}
-function togRow(c,name,sub,id){
-  return '<div class="tr"><div class="ti"><span class="dot" style="background:'+c+'"></span><div><div class="tn">'+name+'</div><div class="ts2">'+sub+'</div></div></div><label class="sw"><input type="checkbox" id="'+id+'" onchange="live()"><span class="swt"></span></label></div>';
-}
-function ejeRow(c,l,name,bid,pid,pct){
-  return '<div class="er"><span class="el" style="color:'+c+'">'+l+'</span><div class="eb"><div class="eh"><span class="en">'+name+'</span><span class="ep" style="color:'+c+'" id="'+pid+'">'+pct+'%</span></div><div class="etk"><div class="ef" id="'+bid+'" style="width:'+pct+'%;background:'+c+'"></div></div></div></div>';
-}
-function proto(c,n,w){
-  return '<div class="pi"><div class="pd" style="background:'+c+'"></div><div><div class="pn">'+n+'</div><div class="pw">'+w+'</div></div></div>';
-}
+function slR(l,s,v){return '<div class="sr"><span class="sl">'+l+'</span><input type="range" min="1" max="10" value="7" step="1" id="'+s+'" oninput="live()"><span class="sv" id="'+v+'">7</span></div>';}
+function nR(c,l,id,val){return '<div class="nr"><div class="nl"><span class="dot" style="background:'+c+'"></span>'+l+'</div><input type="number" class="ni" id="'+id+'" min="0" max="120" value="'+val+'"></div>';}
+function tR(c,n,s,id){return '<div class="tr"><div class="ti"><span class="dot" style="background:'+c+'"></span><div><div class="tn">'+n+'</div><div class="ts2">'+s+'</div></div></div><label class="sw"><input type="checkbox" id="'+id+'" onchange="live()"><span class="swt"></span></label></div>';}
+function eR(c,l,n,b,p,pct){return '<div class="er"><span class="el" style="color:'+c+'">'+l+'</span><div class="eb"><div class="eh"><span class="en">'+n+'</span><span class="ep" style="color:'+c+'" id="'+p+'">'+pct+'%</span></div><div class="etk"><div class="ef" id="'+b+'" style="width:'+pct+'%;background:'+c+'"></div></div></div></div>';}
+function pr(c,n,w){return '<div class="pi"><div class="pd" style="background:'+c+'"></div><div><div class="pn">'+n+'</div><div class="pw">'+w+'</div></div></div>';}
 
 function live(){
-  var e=gv("sl-e"),f=gv("sl-f"),h=gv("sl-h"),s=gv("sl-s");
+  var e=gv("sle"),f=gv("slf"),h=gv("slh"),s=gv("sls");
   var ay=gn("ia"),lec=gn("il");
   var en=gc("ten"),fr=gc("tfr"),ci=gc("tci");
-  st("v-e",e);st("v-f",f);st("v-h",h);st("v-s",s);
+  st("ve",e);st("vf",f);st("vh",h);st("vs",s);
   var ejH=Math.min(100,Math.round((e*0.35+h*0.30+Math.min(s,10)*0.20+Math.min(ay/2,10)*0.15)*10));
   var ejP=Math.min(100,Math.round((f*0.50+Math.min(lec/6,10)*0.30+h*0.20)*10));
   var ejK=Math.round(((en?10:0)*0.40+(fr?10:0)*0.30+(ci?10:0)*0.30)*10);
   var sc=((ejH/10+ejP/10+ejK/10)/3).toFixed(1);
-  setBar("bar-h","pct-h",ejH);
-  setBar("bar-p","pct-p",ejP);
-  setBar("bar-k","pct-k",ejK);
+  setBar("bh","ph",ejH);setBar("bp","pp",ejP);setBar("bk","pk",ejK);
   st("sc",sc);
 }
 
@@ -226,14 +393,14 @@ async function guardar(){
   btn.disabled=true;btn.textContent="Guardando...";
   try{
     var res=await callAPI("guardarRegistro",{
-      energia:gv("sl-e"),humor:gv("sl-h"),sueno:gv("sl-s"),foco:gv("sl-f"),
+      energia:gv("sle"),humor:gv("slh"),sueno:gv("sls"),foco:gv("slf"),
       ayuno:gn("ia"),lectura:gn("il"),
       entreno:gc("ten"),frio:gc("tfr"),cierre:gc("tci")
     });
     if(res.ok){
       btn.textContent="Guardado";btn.classList.add("ok");
       toast("Registro guardado. Huella permanente.","ok");
-      setTimeout(async function(){estado=await callAPI("getEstado");render();},1400);
+      setTimeout(async function(){estado=await callAPI("getEstado");renderApp();},1400);
     }else{
       btn.disabled=false;btn.textContent="Guardar registro";
       toast(res.msg,"err");
@@ -244,7 +411,7 @@ async function guardar(){
   }
 }
 
-function renderChart(h){
+function rChart(h){
   if(!h||h.length<2)return "";
   var bars=h.map(function(d){
     var pct=Math.round(((d.score||0)/10)*100);
@@ -255,17 +422,17 @@ function renderChart(h){
     var dt=new Date(d.fecha+"T00:00:00");
     return '<div class="cdt">'+dt.getDate()+"/"+(dt.getMonth()+1)+'</div>';
   }).join("");
-  return '<div class="cw"><div class="ce">Ultimos '+h.length+' dias</div><div class="cb">'+bars+'</div><div class="cd">'+dates+'</div></div>';
+  return '<div class="cw"><div class="ce">Ultimos '+h.length+' dias</div><div class="cb">'+bars+'</div><div class="cd2">'+dates+'</div></div>';
 }
 
 function gv(id){var el=document.getElementById(id);return el?Number(el.value):0;}
 function gn(id){var el=document.getElementById(id);return el?Number(el.value)||0:0;}
 function gc(id){var el=document.getElementById(id);return el?el.checked:false;}
 function st(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
-function setBar(bid,pid,pct){
-  var b=document.getElementById(bid),p=document.getElementById(pid);
-  if(b)b.style.width=Math.min(pct,100)+"%";
-  if(p)p.textContent=Math.min(pct,100)+"%";
+function setBar(b,p,pct){
+  var be=document.getElementById(b),pe=document.getElementById(p);
+  if(be)be.style.width=Math.min(pct,100)+"%";
+  if(pe)pe.textContent=Math.min(pct,100)+"%";
 }
 function toast(msg,type){
   var t=document.getElementById("toast");
@@ -273,7 +440,11 @@ function toast(msg,type){
   setTimeout(function(){t.className="toast";},3200);
 }
 
-init();
+var reveals=document.querySelectorAll(".section,.cta-section");
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){e.target.style.opacity="1";e.target.style.transform="translateY(0)";}});
+},{threshold:0.08});
+reveals.forEach(function(r){r.style.opacity="0";r.style.transform="translateY(24px)";r.style.transition="opacity 0.6s ease,transform 0.6s ease";obs.observe(r);});
 </script>
 </body>
 </html>
