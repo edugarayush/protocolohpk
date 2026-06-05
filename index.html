@@ -10,7 +10,7 @@
   --bg:#0D0D0D;--bg2:#111111;--bg3:#181818;--bg4:#1E1E1E;
   --text:#EEEEEE;--muted:#CCCCCC;--hint:#888888;
   --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
-  --red:#E05A3A;--amber:#D4A017;--green:#4CAF7A;
+  --red:#E05A3A;--amber:#D4A017;--green:#4CAF7A;--blue:#1A3A5C;--blue2:#4488CC;--sage:#2D4A3E;--sage2:#4CAF7A;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{font-size:16px;-webkit-text-size-adjust:100%;overflow-x:hidden}
@@ -19,6 +19,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 @keyframes lb{from{width:0}to{width:100%}}
 @keyframes shine{0%{background-position:-200% center}100%{background-position:200% center}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.032)}}
+.hpk-color{background:linear-gradient(135deg,#4488CC 0%,#2D4A3E 40%,#4488CC 60%,#4CAF7A 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shine 6s linear infinite}
 
 .longevity{font-style:italic;background:linear-gradient(90deg,#666 0%,#fff 40%,#aaa 50%,#fff 60%,#666 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shine 3s linear infinite}
 .btn-pulse{animation:pulse 2.2s ease-in-out infinite}
@@ -33,7 +34,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 #appview{display:none;max-width:480px;margin:0 auto;padding-bottom:48px}
 #appview.active{display:block}
 
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,0.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,0.94);backdrop-filter:blur(16px);border-bottom:1px solid rgba(26,58,92,0.3)}
 .nav-inner{max-width:900px;margin:0 auto;padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
 .nav-logo{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;color:var(--hint);text-transform:uppercase}
 .nav-logo b{color:var(--muted)}
@@ -55,8 +56,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,0.9
 .btn-ghost{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--hint);background:none;border:1px solid var(--border2);padding:14px 32px;border-radius:2px;cursor:pointer;width:100%;text-align:center}
 .btn-ghost:active{border-color:var(--muted);color:var(--muted)}
 
-.section{padding:56px 24px;border-top:1px solid var(--border);max-width:900px;margin:0 auto;width:100%}
-.section+.section{border-top:none}
+.section{padding:56px 24px;border-top:1px solid rgba(26,58,92,0.35);max-width:900px;margin:0 auto;width:100%}
+.section+.section{border-top:1px solid rgba(26,58,92,0.2)}
 .cta-section{padding:80px 24px;border-top:1px solid var(--border);text-align:center;max-width:900px;margin:0 auto;width:100%}
 .sec-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.22em;color:var(--hint);text-transform:uppercase;margin-bottom:32px}
 @media(min-width:768px){
@@ -70,12 +71,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,0.9
 }
 
 .ejes-wrap{display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:6px;overflow:hidden}
-.eje-row{background:var(--bg2);padding:22px 20px;display:flex;align-items:center;justify-content:space-between}
+.eje-row{background:var(--bg2);padding:22px 20px;display:flex;align-items:center;justify-content:space-between;border-left:2px solid transparent}.eje-row.h{border-left-color:rgba(26,58,92,0.8)}.eje-row.p{border-left-color:rgba(45,74,62,0.8)}.eje-row.k{border-left-color:rgba(255,255,255,0.08)}
 .eje-left{}
 .eje-lbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--hint);letter-spacing:0.16em;text-transform:uppercase;margin-bottom:6px}
 .eje-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:6px}
 .eje-tags{font-family:'DM Mono',monospace;font-size:10px;color:#888888;line-height:1.6}
-.eje-letter-bg{font-family:'Syne',sans-serif;font-size:52px;font-weight:800;color:rgba(255,255,255,0.04);flex-shrink:0}
+.eje-letter-bg{font-family:'Syne',sans-serif;font-size:52px;font-weight:800;flex-shrink:0}.eje-letter-bg.h{color:rgba(26,58,92,0.35)}.eje-letter-bg.p{color:rgba(45,74,62,0.35)}.eje-letter-bg.k{color:rgba(255,255,255,0.05)}
 
 .feat{display:flex;gap:20px;padding:22px 0;border-bottom:1px solid var(--border)}
 .feat:last-child{border-bottom:none}
@@ -106,7 +107,7 @@ footer{padding:24px;border-top:1px solid var(--border);display:flex;justify-cont
 .hdr-row{display:flex;justify-content:space-between;align-items:flex-start}
 .hdr-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;line-height:1.05;color:var(--text)}
 .hdr-title b{color:var(--text)}
-.badge{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 12px;border-radius:2px;background:var(--bg3);color:var(--muted);border:1px solid var(--border2)}
+.badge{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 12px;border-radius:2px;background:rgba(26,58,92,0.15);color:#6688AA;border:1px solid rgba(26,58,92,0.4)}
 .hdr-sem{font-size:10px;color:var(--hint);margin-top:6px;font-family:'DM Mono',monospace;text-align:right}
 
 .mts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
@@ -116,7 +117,7 @@ footer{padding:24px;border-top:1px solid var(--border);display:flex;justify-cont
 .mt-sub{font-size:10px;color:#888888;margin-top:4px;font-family:'DM Mono',monospace}
 .mt-sub.up{color:var(--green)}.mt-sub.dn{color:var(--red)}
 
-.card{margin:14px 14px 0;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:20px}
+.card{margin:14px 14px 0;background:var(--bg2);border:1px solid rgba(26,58,92,0.2);border-radius:6px;padding:20px}
 .card:last-child{margin-bottom:14px}
 .ct{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;color:#888888;text-transform:uppercase;letter-spacing:0.18em;margin-bottom:20px}
 
@@ -202,7 +203,7 @@ input:checked+.swt:before{transform:translateX(20px);background:var(--green)}
     <div class="hero-tag">Sistema de automonitoreo hormonal para hombres</div>
     <h1 class="hero-title">
       <span class="l1">Protocolo</span>
-      <span class="l2">HPK</span>
+      <span class="l2 hpk-color">HPK</span>
       <span class="l3 longevity">Longevity.</span>
     </h1>
     <p class="hero-sub">No es disciplina. Es <b>biología</b>. Nueve variables diarias. Un historial inmutable. Tu química, visible.</p>
@@ -215,29 +216,29 @@ input:checked+.swt:before{transform:translateX(20px);background:var(--green)}
   <section class="section">
     <div class="sec-tag">Los tres ejes</div>
     <div class="ejes-wrap">
-      <div class="eje-row">
+      <div class="eje-row h">
         <div class="eje-left">
           <div class="eje-lbl">Eje H</div>
           <div class="eje-name">Hormonal</div>
           <div class="eje-tags">GLP-1 · Dopamina · GH · Testosterona</div>
         </div>
-        <div class="eje-letter-bg">H</div>
+        <div class="eje-letter-bg h">H</div>
       </div>
-      <div class="eje-row">
+      <div class="eje-row p">
         <div class="eje-left">
           <div class="eje-lbl">Eje P</div>
           <div class="eje-name">Psico-cognitivo</div>
           <div class="eje-tags">BDNF · Serotonina · Cortisol · Oxitocina</div>
         </div>
-        <div class="eje-letter-bg">P</div>
+        <div class="eje-letter-bg p">P</div>
       </div>
-      <div class="eje-row">
+      <div class="eje-row k">
         <div class="eje-left">
           <div class="eje-lbl">Eje K</div>
           <div class="eje-name">Kinético</div>
           <div class="eje-tags">Noradrenalina · Melatonina · IGF-1</div>
         </div>
-        <div class="eje-letter-bg">K</div>
+        <div class="eje-letter-bg k">K</div>
       </div>
     </div>
   </section>
@@ -402,7 +403,8 @@ function nR(l,id,val){return '<div class="nr"><div class="nl"><span class="dot" 
 function tR(n,s,id){return '<div class="tr"><div class="ti"><span class="dot" style="background:#333"></span><div><div class="tn">'+n+'</div><div class="ts2">'+s+'</div></div></div><label class="sw"><input type="checkbox" id="'+id+'" onchange="live()"><span class="swt"></span></label></div>';}
 function eR(l,n,b,p,pct){
   var c=barColor(pct);
-  return '<div class="er"><span class="el">'+l+'</span><div class="eb"><div class="eh"><span class="en">'+n+'</span><span class="ep" style="color:'+c+'" id="'+p+'">'+pct+'%</span></div><div class="etk"><div class="ef" id="'+b+'" style="width:'+pct+'%;background:'+c+'"></div></div></div></div>';
+  var track=l==="H"?"rgba(26,58,92,0.4)":l==="P"?"rgba(45,74,62,0.4)":"rgba(255,255,255,0.06)";
+  return '<div class="er"><span class="el">'+l+'</span><div class="eb"><div class="eh"><span class="en">'+n+'</span><span class="ep" style="color:'+c+'" id="'+p+'">'+pct+'%</span></div><div class="etk" style="background:'+track+'"><div class="ef" id="'+b+'" style="width:'+pct+'%;background:'+c+'"></div></div></div></div>';
 }
 function pr(n,w){return '<div class="pi"><div class="pd"></div><div><div class="pn">'+n+'</div><div class="pw">'+w+'</div></div></div>';}
 
